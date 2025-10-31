@@ -1,11 +1,14 @@
+/* 🌐 Structure générale */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom right, #e0f0ff, #f0f8ff);
   text-align: center;
   padding: 50px;
   color: #003366;
+  margin: 0;
 }
 
+/* 🧱 Conteneur principal */
 .container {
   background: #ffffff;
   padding: 40px;
@@ -13,8 +16,10 @@ body {
   box-shadow: 0 0 20px rgba(0, 51, 102, 0.1);
   display: inline-block;
   max-width: 600px;
+  width: 100%;
 }
 
+/* 🧾 Titres et paragraphes */
 h1, h2 {
   color: #0077cc;
   margin-bottom: 10px;
@@ -24,6 +29,7 @@ p {
   color: #005599;
 }
 
+/* 📤 Input image */
 input[type="file"] {
   margin: 20px 0;
   padding: 10px;
@@ -34,6 +40,7 @@ input[type="file"] {
   color: #003366;
 }
 
+/* ⏳ Chargement */
 #loading {
   display: none;
   font-weight: bold;
@@ -41,6 +48,7 @@ input[type="file"] {
   margin-top: 20px;
 }
 
+/* 🖼️ Image résultat */
 #result img {
   margin-top: 30px;
   max-width: 100%;
@@ -55,6 +63,7 @@ input[type="file"] {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* 📥 Boutons téléchargement et suppression */
 #downloadBtn, #deleteBtn {
   display: none;
   margin-top: 20px;
@@ -75,6 +84,7 @@ input[type="file"] {
   transform: scale(1.05);
 }
 
+/* 🔐 Boutons de connexion */
 .login-btn {
   display: block;
   width: 100%;
@@ -97,23 +107,31 @@ input[type="file"] {
   background-color: #3b5998;
 }
 
-.apple {
-  background-color: #333;
+.logout {
+  background-color: #ff5252;
 }
+
+.logout:hover {
+  background-color: #c62828;
+}
+
+/* 📢 Bannière pub */
 .ad-banner {
   background-color: #fff8e1;
   border: 2px dashed #ff9900;
   padding: 20px;
-  margin-bottom: 30px;
+  margin-top: 30px;
   border-radius: 10px;
   font-weight: bold;
   color: #cc6600;
   box-shadow: 0 0 10px rgba(255, 153, 0, 0.2);
 }
+
+/* 🧠 Bannière principale (sans logo) */
 .custom-banner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background: linear-gradient(to right, #0077cc, #00c6ff);
   color: white;
   padding: 20px 30px;
@@ -121,12 +139,6 @@ input[type="file"] {
   margin-bottom: 30px;
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
   flex-wrap: wrap;
-}
-
-.logo {
-  width: 60px;
-  height: 60px;
-  margin-right: 20px;
 }
 
 .banner-text {
@@ -160,4 +172,60 @@ input[type="file"] {
   background-color: #cc0000;
   color: white;
   transform: scale(1.05);
+}
+
+/* 👤 Zone utilisateur connecté */
+#userInfo {
+  background: linear-gradient(to right, #e0f7fa, #e3f2fd);
+  border: 2px solid #00acc1;
+  padding: 25px;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 172, 193, 0.2);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+#userInfo h2 {
+  color: #0077cc;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+#userInfo p {
+  color: #005577;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* 🧑‍🎤 Avatar utilisateur */
+#userAvatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  box-shadow: 0 0 8px rgba(0, 119, 204, 0.3);
+}
+
+/* 🔄 Zone de connexion/inscription */
+#authSection {
+  margin-top: 30px;
+  padding: 25px;
+  background: linear-gradient(to bottom right, #f0f8ff, #ffffff);
+  border: 2px dashed #0077cc;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 119, 204, 0.1);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+#authSection h2 {
+  color: #0077cc;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#authSection p {
+  color: #005599;
+  font-size: 15px;
+  margin-bottom: 20px;
 }
