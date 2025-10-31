@@ -1,0 +1,163 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #e0f0ff, #f0f8ff);
+  text-align: center;
+  padding: 50px;
+  color: #003366;
+}
+
+.container {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 51, 102, 0.1);
+  display: inline-block;
+  max-width: 600px;
+}
+
+h1, h2 {
+  color: #0077cc;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #005599;
+}
+
+input[type="file"] {
+  margin: 20px 0;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #0077cc;
+  border-radius: 6px;
+  background-color: #f0f8ff;
+  color: #003366;
+}
+
+#loading {
+  display: none;
+  font-weight: bold;
+  color: #0077cc;
+  margin-top: 20px;
+}
+
+#result img {
+  margin-top: 30px;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 2px solid #0077cc;
+  box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+#downloadBtn, #deleteBtn {
+  display: none;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background-color: #0077cc;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#downloadBtn:hover, #deleteBtn:hover,
+.login-btn:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
+}
+
+.login-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  color: white;
+}
+
+.google {
+  background-color: #4285F4;
+}
+
+.facebook {
+  background-color: #3b5998;
+}
+
+.apple {
+  background-color: #333;
+}
+.ad-banner {
+  background-color: #fff8e1;
+  border: 2px dashed #ff9900;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #cc6600;
+  box-shadow: 0 0 10px rgba(255, 153, 0, 0.2);
+}
+.custom-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to right, #0077cc, #00c6ff);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+}
+
+.banner-text {
+  flex: 1;
+  min-width: 200px;
+}
+
+.banner-text h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.banner-text p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.cta-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 20px;
+  background-color: white;
+  color: #0077cc;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.cta-button:hover {
+  background-color: #cc0000;
+  color: white;
+  transform: scale(1.05);
+}
