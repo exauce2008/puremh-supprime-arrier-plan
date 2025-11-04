@@ -1,7 +1,13 @@
-// 🔥 Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import {
+  getAuth,
+  signInWithPopup,
+  signOut,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 // 🔐 Configuration Firebase
 const firebaseConfig = {
@@ -14,12 +20,15 @@ const firebaseConfig = {
   measurementId: "G-WWW0X9F8N8"
 };
 
-// 🚀 Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-// 📸 Suppression d’arrière-plan avec remove.bg
+// 🔢 Limite d'utilisation
+let imageCount = 0;
+let isLoggedIn = false;
+
+// 📸 Suppression d’arrière-plan
 const imageInput = document.getElementById('imageInput');
 const resultDiv = document.getElementById('result');
 const loadingDiv = document.getElementById('loading');
@@ -29,6 +38,11 @@ const deleteBtn = document.getElementById('deleteBtn');
 imageInput.addEventListener('change', async () => {
   const file = imageInput.files[0];
   if (!file) return;
+
+  if (!isLoggedIn && imageCount >= 2) {
+    alert("🚫 Tu as atteint la limite de 2 images. Connecte-toi pour un accès illimité !");
+    return;
+  }
 
   resultDiv.innerHTML = '';
   downloadBtn.style.display = 'none';
@@ -59,6 +73,8 @@ imageInput.addEventListener('change', async () => {
     downloadBtn.href = url;
     downloadBtn.style.display = 'inline-block';
     deleteBtn.style.display = 'inline-block';
+
+    if (!isLoggedIn) imageCount++;
   } catch (error) {
     resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}</p>`;
   } finally {
@@ -77,22 +93,59 @@ document.querySelector('.google').addEventListener('click', () => {
   const provider = new GoogleAuthProvider();
   signInWithPopup(auth, provider)
     .then(result => {
-      const user = result.user;
-      alert("✅ Connecté avec Google : " + user.displayName);
-      console.log("Nom :", user.displayName);
-      console.log("Email :", user.email);
-      console.log("Photo :", user.photoURL);
+      alert("✅ Connecté avec Google : " + result.user.displayName);
     })
     .catch(error => {
       alert("❌ Erreur Google : " + error.message);
     });
 });
 
-// 🧪 Connexions simulées pour Facebook et Apple
+// 🔐 Connexion Facebook
 document.querySelector('.facebook').addEventListener('click', () => {
-  alert("Connexion Facebook simulée !");
+  const provider = new FacebookAuthProvider();
+  signInWithPopup(auth, provider)
+    .then(result => {
+      alert("✅ Connecté avec Facebook : " + result.user.displayName);
+    })
+    .catch(error => {
+      alert("❌ Erreur Facebook : " + error.message);
+    });
 });
 
-document.querySelector('.apple').addEventListener('click', () => {
-  alert("Connexion Apple simulée !");
+// 🚪 Déconnexion
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  signOut(auth)
+    .then(() => {
+      alert("🚪 Déconnecté !");
+    })
+    .catch(error => {
+      alert("❌ Erreur déconnexion : " + error.message);
+    });
+});
+
+// 👀 État de connexion
+onAuthStateChanged(auth, user => {
+  const userInfo = document.getElementById('userInfo');
+  const authSection = document.getElementById('authSection');
+  const userName = document.getElementById('userName');
+
+  if (user) {
+    isLoggedIn = true;
+    imageCount = 0;
+    userInfo.style.display = 'block';
+    authSection.style.display = 'none';
+    userName.textContent = user.displayName;
+
+    if (user.photoURL) {
+      const avatar = document.createElement('img');
+      avatar.src = user.photoURL;
+      avatar.alt = "Photo de profil";
+      avatar.id = "userAvatar";
+      userInfo.insertBefore(avatar, userName);
+    }
+  } else {
+    isLoggedIn = false;
+    userInfo.style.display = 'none';
+    authSection.style.display = 'block';
+  }
 });
