@@ -274,3 +274,17 @@ input[type="file"] {
   background-color: #cc0000;
   transform: scale(1.05);
 }
+.whatsapp-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #25D366; /* vert WhatsApp */
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.whatsapp-btn:hover {
+  background-color: #128C7E; /* vert foncé WhatsApp */
+}

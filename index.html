@@ -6,23 +6,23 @@
   <title>Puremh - Suppression d’Arrière-plan</title>
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- 🔗 Favicon intégré en base64 -->
-  <link rel="icon" 
-        href="
-
   <script type="module" src="script.js"></script>
 </head>
 <body>
 
-  <!-- 🔷 Bannière principale avec logo -->
+  <!-- 🔝 Barre de navigation -->
+  <nav class="top-nav">
+    <div class="nav-right">
+      <a href="login.html" class="nav-btn">Se connecter</a>
+      <a href="signup.html" class="nav-btn">S’inscrire</a>
+      <a href="contact.html" class="nav-btn">Contact</a>
+      <a href="privacy.html" class="nav-btn">Politique de Confidentialité</a>
+    </div>
+  </nav>
+
+  <!-- 🔷 Bannière principale -->
   <header class="custom-banner">
     <div class="banner-text">
-
-      <!-- 🖼️ Logo intégré en base64 -->
-      <img src="
-           alt="Logo Puremh" class="logo" />
-
       <h1>Puremh</h1>
       <p>Supprime l’arrière-plan en un clic. Rapide, intelligent, gratuit.</p>
       <a href="#imageInput" class="cta-button">Commencer maintenant</a>
@@ -48,14 +48,6 @@
       <h2>Bienvenue, <span id="userName"></span> 👋</h2>
       <p>Tu es connecté.</p>
       <button id="logoutBtn" class="login-btn logout">Se déconnecter</button>
-    </section>
-
-    <!-- 🔐 Zone de connexion/inscription -->
-    <section id="authSection">
-      <h2>Connexion ou Inscription</h2>
-      <p>Connecte-toi pour débloquer l’accès illimité :</p>
-      <button class="login-btn google">Se connecter avec Google</button>
-      <button class="login-btn facebook">Se connecter avec Facebook</button>
     </section>
   </main>
 

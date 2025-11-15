@@ -35,93 +35,106 @@ const loadingDiv = document.getElementById('loading');
 const downloadBtn = document.getElementById('downloadBtn');
 const deleteBtn = document.getElementById('deleteBtn');
 
-imageInput.addEventListener('change', async () => {
-  const file = imageInput.files[0];
-  if (!file) return;
+if (imageInput) {
+  imageInput.addEventListener('change', async () => {
+    const file = imageInput.files[0];
+    if (!file) return;
 
-  if (!isLoggedIn && imageCount >= 2) {
-    alert("🚫 Tu as atteint la limite de 2 images. Connecte-toi pour un accès illimité !");
-    return;
-  }
-
-  resultDiv.innerHTML = '';
-  downloadBtn.style.display = 'none';
-  deleteBtn.style.display = 'none';
-  loadingDiv.style.display = 'block';
-
-  const formData = new FormData();
-  formData.append('image_file', file);
-  formData.append('size', 'auto');
-
-  try {
-    const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-      method: 'POST',
-      headers: {
-        'X-Api-Key': 'Ck5MT53W7vGfavrPaE7GfqvR'
-      },
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error('Erreur API: ' + response.statusText);
+    if (!isLoggedIn && imageCount >= 2) {
+      alert("🚫 Tu as atteint la limite de 2 images. Connecte-toi pour un accès illimité !");
+      return;
     }
 
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
+    resultDiv.innerHTML = '';
+    downloadBtn.style.display = 'none';
+    deleteBtn.style.display = 'none';
+    loadingDiv.style.display = 'block';
 
-    resultDiv.innerHTML = `<img src="${url}" alt="Image sans arrière-plan" />`;
-    downloadBtn.href = url;
-    downloadBtn.style.display = 'inline-block';
-    deleteBtn.style.display = 'inline-block';
+    const formData = new FormData();
+    formData.append('image_file', file);
+    formData.append('size', 'auto');
 
-    if (!isLoggedIn) imageCount++;
-  } catch (error) {
-    resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}</p>`;
-  } finally {
-    loadingDiv.style.display = 'none';
-  }
-});
+    try {
+      const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+        method: 'POST',
+        headers: {
+          'X-Api-Key': 'Ck5MT53W7vGfavrPaE7GfqvR'
+        },
+        body: formData
+      });
 
-deleteBtn.addEventListener('click', () => {
-  resultDiv.innerHTML = '';
-  downloadBtn.style.display = 'none';
-  deleteBtn.style.display = 'none';
-});
+      if (!response.ok) {
+        throw new Error('Erreur API: ' + response.statusText);
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      resultDiv.innerHTML = `<img src="${url}" alt="Image sans arrière-plan" />`;
+      downloadBtn.href = url;
+      downloadBtn.style.display = 'inline-block';
+      deleteBtn.style.display = 'inline-block';
+
+      if (!isLoggedIn) imageCount++;
+    } catch (error) {
+      resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}. Vérifie ta connexion ou ta clé API.</p>`;
+    } finally {
+      loadingDiv.style.display = 'none';
+    }
+  });
+}
+
+if (deleteBtn) {
+  deleteBtn.addEventListener('click', () => {
+    resultDiv.innerHTML = '';
+    downloadBtn.style.display = 'none';
+    deleteBtn.style.display = 'none';
+  });
+}
 
 // 🔐 Connexion Google
-document.querySelector('.google').addEventListener('click', () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then(result => {
-      alert("✅ Connecté avec Google : " + result.user.displayName);
-    })
-    .catch(error => {
-      alert("❌ Erreur Google : " + error.message);
-    });
-});
+const googleBtn = document.querySelector('.google');
+if (googleBtn) {
+  googleBtn.addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        alert("✅ Connecté avec Google : " + result.user.displayName);
+      })
+      .catch(error => {
+        alert("❌ Erreur Google : " + error.message);
+      });
+  });
+}
 
 // 🔐 Connexion Facebook
-document.querySelector('.facebook').addEventListener('click', () => {
-  const provider = new FacebookAuthProvider();
-  signInWithPopup(auth, provider)
-    .then(result => {
-      alert("✅ Connecté avec Facebook : " + result.user.displayName);
-    })
-    .catch(error => {
-      alert("❌ Erreur Facebook : " + error.message);
-    });
-});
+const facebookBtn = document.querySelector('.facebook');
+if (facebookBtn) {
+  facebookBtn.addEventListener('click', () => {
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        alert("✅ Connecté avec Facebook : " + result.user.displayName);
+      })
+      .catch(error => {
+        alert("❌ Erreur Facebook : " + error.message);
+      });
+  });
+}
 
 // 🚪 Déconnexion
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  signOut(auth)
-    .then(() => {
-      alert("🚪 Déconnecté !");
-    })
-    .catch(error => {
-      alert("❌ Erreur déconnexion : " + error.message);
-    });
-});
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    signOut(auth)
+      .then(() => {
+        alert("🚪 Déconnecté !");
+      })
+      .catch(error => {
+        alert("❌ Erreur déconnexion : " + error.message);
+      });
+  });
+}
 
 // 👀 État de connexion
 onAuthStateChanged(auth, user => {
@@ -132,20 +145,22 @@ onAuthStateChanged(auth, user => {
   if (user) {
     isLoggedIn = true;
     imageCount = 0;
-    userInfo.style.display = 'block';
-    authSection.style.display = 'none';
-    userName.textContent = user.displayName;
+    if (userInfo) userInfo.style.display = 'block';
+    if (authSection) authSection.style.display = 'none';
+    if (userName) userName.textContent = user.displayName;
 
-    if (user.photoURL) {
+    if (user.photoURL && !document.getElementById('userAvatar')) {
       const avatar = document.createElement('img');
       avatar.src = user.photoURL;
       avatar.alt = "Photo de profil";
       avatar.id = "userAvatar";
-      userInfo.insertBefore(avatar, userName);
+      if (userInfo && userName) {
+        userInfo.insertBefore(avatar, userName);
+      }
     }
   } else {
     isLoggedIn = false;
-    userInfo.style.display = 'none';
-    authSection.style.display = 'block';
+    if (userInfo) userInfo.style.display = 'none';
+    if (authSection) authSection.style.display = 'block';
   }
 });
