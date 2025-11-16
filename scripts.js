@@ -100,7 +100,7 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Google : " + result.user.displayName);
-        window.location.href = "index.html"; // 🔄 Redirection vers accueil
+        window.location.href = "index.html"; // Redirection vers accueil
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -116,7 +116,7 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Facebook : " + result.user.displayName);
-        window.location.href = "index.html"; // 🔄 Redirection vers accueil
+        window.location.href = "index.html"; // Redirection vers accueil
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
@@ -131,7 +131,7 @@ if (logoutBtn) {
     signOut(auth)
       .then(() => {
         alert("🚪 Déconnecté !");
-        window.location.href = "index.html"; // 🔄 Retour accueil
+        window.location.href = "index.html"; // Retour accueil
       })
       .catch(error => {
         alert("❌ Erreur déconnexion : " + error.message);
@@ -158,14 +158,27 @@ onAuthStateChanged(auth, user => {
   if (user) {
     isLoggedIn = true;
     imageCount = 0;
+
+    // ✅ Cacher login/signup
     if (navLogin) navLogin.style.display = 'none';
-    if (navSettings) navSettings.style.display = 'flex';
+
+    // ✅ Afficher Paramètres
+    if (navSettings) navSettings.style.display = 'block';
+
+    // ✅ Afficher infos utilisateur
     if (userInfo) userInfo.style.display = 'block';
     if (userName) userName.textContent = user.displayName;
+
   } else {
     isLoggedIn = false;
+
+    // ❌ Afficher login/signup
     if (navLogin) navLogin.style.display = 'flex';
+
+    // ❌ Cacher Paramètres
     if (navSettings) navSettings.style.display = 'none';
+
+    // ❌ Cacher infos utilisateur
     if (userInfo) userInfo.style.display = 'none';
   }
 });
