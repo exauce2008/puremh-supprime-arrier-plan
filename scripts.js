@@ -141,8 +141,8 @@ if (logoutBtn) {
 onAuthStateChanged(auth, user => {
   const userInfo = document.getElementById('userInfo');
   const userName = document.getElementById('userName');
-  const navLogin = document.querySelector('.nav-login');
-  const navSettings = document.querySelector('.nav-settings');
+  const navLogin = document.getElementById('navLogin');     // ✅ corrigé
+  const navSettings = document.getElementById('navSettings'); // ✅ corrigé
 
   console.log("✅ Firebase détecte :", user);
 
