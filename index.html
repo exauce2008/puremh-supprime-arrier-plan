@@ -12,11 +12,21 @@
 
   <!-- 🔝 Barre de navigation -->
   <nav class="top-nav">
-    <div class="nav-right">
+    <!-- Zone avant connexion -->
+    <div class="nav-right nav-login">
       <a href="login.html" class="nav-btn">Se connecter</a>
       <a href="signup.html" class="nav-btn">S’inscrire</a>
-      <a href="contact.html" class="nav-btn">Contact</a>
-      <a href="privacy.html" class="nav-btn">Politique de Confidentialité</a>
+    </div>
+
+    <!-- Zone après connexion -->
+    <div class="nav-right nav-settings" style="display:none;">
+      <button id="settingsBtn" class="nav-btn">⚙️ Paramètres</button>
+      <div id="settingsMenu" class="settings-menu" style="display:none;">
+        <a href="profile.html" class="menu-item">👤 Profil</a>
+        <a href="contact.html" class="menu-item">📱 Contact</a>
+        <a href="privacy.html" class="menu-item">📜 Politique</a>
+        <button id="logoutBtn" class="menu-item">🚪 Se déconnecter</button>
+      </div>
     </div>
   </nav>
 
@@ -47,7 +57,6 @@
     <section id="userInfo" style="display: none;">
       <h2>Bienvenue, <span id="userName"></span> 👋</h2>
       <p>Tu es connecté.</p>
-      <button id="logoutBtn" class="login-btn logout">Se déconnecter</button>
     </section>
   </main>
 

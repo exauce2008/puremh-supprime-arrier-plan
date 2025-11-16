@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Connexion - Puremh</title>
+  <title>Profil - Puremh</title>
   <link rel="stylesheet" href="style.css" />
   <script type="module" src="script.js"></script>
 </head>
@@ -28,11 +28,14 @@
     </div>
   </nav>
 
+  <!-- 👤 Contenu Profil -->
   <main class="container">
-    <h2>Connexion</h2>
-    <p>Connecte-toi avec ton compte :</p>
-    <button class="login-btn google">Se connecter avec Google</button>
-    <button class="login-btn facebook">Se connecter avec Facebook</button>
+    <h2>Mon Profil</h2>
+    <div id="profileInfo">
+      <img id="profileAvatar" alt="Avatar utilisateur" style="display:none; width:80px; height:80px; border-radius:50%; margin-bottom:15px;" />
+      <p><strong>Nom :</strong> <span id="profileName"></span></p>
+      <p><strong>Email :</strong> <span id="profileEmail"></span></p>
+    </div>
   </main>
 
 </body>

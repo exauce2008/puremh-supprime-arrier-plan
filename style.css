@@ -288,3 +288,49 @@ input[type="file"] {
 .whatsapp-btn:hover {
   background-color: #128C7E; /* vert foncé WhatsApp */
 }
+/* ⚙️ Menu Paramètres */
+.nav-settings {
+  position: relative;
+}
+
+#settingsBtn {
+  padding: 10px 16px;
+  background-color: #0077cc;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#settingsBtn:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
+}
+
+.settings-menu {
+  position: absolute;
+  right: 0;
+  top: 45px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.settings-menu .menu-item {
+  padding: 12px;
+  text-decoration: none;
+  color: #003366;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.settings-menu .menu-item:hover {
+  background: #f0f8ff;
+}
