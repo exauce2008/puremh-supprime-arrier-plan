@@ -77,7 +77,7 @@ if (imageInput) {
 
       if (!isLoggedIn) imageCount++;
     } catch (error) {
-      resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}. Vérifie ta connexion ou ta clé API.</p>`;
+      resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}</p>`;
     } finally {
       loadingDiv.style.display = 'none';
     }
@@ -100,7 +100,7 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Google : " + result.user.displayName);
-        window.location.href = "index.html"; // Redirection vers accueil
+        window.location.href = "index.html"; // ✅ retour automatique à l'accueil
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -116,7 +116,7 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Facebook : " + result.user.displayName);
-        window.location.href = "index.html"; // Redirection vers accueil
+        window.location.href = "index.html"; // ✅ retour automatique à l'accueil
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
@@ -131,7 +131,7 @@ if (logoutBtn) {
     signOut(auth)
       .then(() => {
         alert("🚪 Déconnecté !");
-        window.location.href = "index.html"; // Retour accueil
+        window.location.href = "index.html"; // ✅ retour à l'accueil
       })
       .catch(error => {
         alert("❌ Erreur déconnexion : " + error.message);
@@ -139,46 +139,45 @@ if (logoutBtn) {
   });
 }
 
-// ⚙️ Menu Paramètres
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsMenu = document.getElementById('settingsMenu');
-if (settingsBtn) {
-  settingsBtn.addEventListener('click', () => {
-    settingsMenu.style.display = settingsMenu.style.display === 'none' ? 'block' : 'none';
-  });
-}
-
 // 👀 État de connexion
 onAuthStateChanged(auth, user => {
+  const userInfo = document.getElementById('userInfo');
+  const authSection = document.getElementById('authSection');
+  const userName = document.getElementById('userName');
+
   const navLogin = document.querySelector('.nav-login');
   const navSettings = document.querySelector('.nav-settings');
-  const userInfo = document.getElementById('userInfo');
-  const userName = document.getElementById('userName');
 
   if (user) {
     isLoggedIn = true;
     imageCount = 0;
 
-    // ✅ Cacher login/signup
-    if (navLogin) navLogin.style.display = 'none';
-
-    // ✅ Afficher Paramètres
-    if (navSettings) navSettings.style.display = 'block';
-
-    // ✅ Afficher infos utilisateur
+    // ✅ Afficher zone bienvenue
     if (userInfo) userInfo.style.display = 'block';
+    if (authSection) authSection.style.display = 'none';
     if (userName) userName.textContent = user.displayName;
 
+    // ✅ Basculer la nav
+    if (navLogin) navLogin.style.display = 'none';
+    if (navSettings) navSettings.style.display = 'block';
+
+    // ✅ Avatar
+    if (user.photoURL) {
+      const avatar = document.createElement('img');
+      avatar.src = user.photoURL;
+      avatar.alt = "Photo de profil";
+      avatar.id = "userAvatar";
+      userInfo.insertBefore(avatar, userName);
+    }
   } else {
     isLoggedIn = false;
 
-    // ❌ Afficher login/signup
-    if (navLogin) navLogin.style.display = 'flex';
-
-    // ❌ Cacher Paramètres
-    if (navSettings) navSettings.style.display = 'none';
-
-    // ❌ Cacher infos utilisateur
+    // ❌ Cacher zone bienvenue
     if (userInfo) userInfo.style.display = 'none';
+    if (authSection) authSection.style.display = 'block';
+
+    // ❌ Basculer la nav
+    if (navLogin) navLogin.style.display = 'flex';
+    if (navSettings) navSettings.style.display = 'none';
   }
 });
