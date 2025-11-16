@@ -40,7 +40,6 @@ if (imageInput) {
     const file = imageInput.files[0];
     if (!file) return;
 
-    // 🔒 Limite pour les invités
     if (!isLoggedIn && imageCount >= 2) {
       alert("🚫 Tu as atteint la limite de 2 images. Connecte-toi pour un accès illimité !");
       return;
@@ -99,7 +98,7 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Google : " + result.user.displayName);
-        window.location.href = "index.html"; // 🔁 Redirection vers accueil
+        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -115,7 +114,7 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Facebook : " + result.user.displayName);
-        window.location.href = "index.html"; // 🔁 Redirection vers accueil
+        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
@@ -130,7 +129,7 @@ if (logoutBtn) {
     signOut(auth)
       .then(() => {
         alert("🚪 Déconnecté !");
-        window.location.href = "index.html"; // 🔁 Retour à l’accueil
+        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur déconnexion : " + error.message);
