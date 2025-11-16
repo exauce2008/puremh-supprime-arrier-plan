@@ -145,7 +145,9 @@ onAuthStateChanged(auth, user => {
   const navLogin = document.querySelector('.nav-login');
   const navSettings = document.querySelector('.nav-settings');
 
-  console.log("[Firebase] onAuthStateChanged user:", user);
+  console.log("✅ Firebase détecte :", user);
+  console.log("🔍 nav-login trouvé ?", !!navLogin);
+  console.log("🔍 nav-settings trouvé ?", !!navSettings);
 
   // 🔍 AVANT CONNEXION
   if (!user) {
@@ -169,11 +171,11 @@ onAuthStateChanged(auth, user => {
   if (navSettings) navSettings.style.display = 'block';
   if (userName) userName.textContent = user.displayName;
 
-  if (user.photoURL && userName) {
+  if (user.photoURL && userName && userName.parentNode) {
     const avatar = document.createElement('img');
     avatar.src = user.photoURL;
     avatar.alt = "Photo de profil";
     avatar.id = "userAvatar";
-    userName.before(avatar); // ✅ Correction ici
+    userName.before(avatar);
   }
 });
