@@ -24,7 +24,7 @@
       <div id="settingsMenu" class="settings-menu" style="display:none;">
         <a href="profile.html" class="menu-item">👤 Profil</a>
         <a href="privacy.html" class="menu-item">📜 Politique</a>
-        <a href="cgu.html" class="menu-item">📑 CGU</a> <!-- ✅ Nouveau lien CGU -->
+        <a href="cgu.html" class="menu-item">📑 CGU</a>
         <button id="logoutBtn" class="menu-item">🚪 Se déconnecter</button>
       </div>
     </div>
@@ -54,9 +54,10 @@
     <hr />
 
     <!-- 👤 Zone utilisateur connecté -->
-    <section id="userInfo" style="display: none;">
-      <h2>Bienvenue, <span id="userName"></span> 👋</h2>
-      <p>Tu es connecté.</p>
+    <section id="userInfo" style="display:none; display:flex; align-items:center; gap:8px;">
+      <!-- Avatar sera inséré ici -->
+      <span id="userName"></span>
+      <span>👋 Bienvenue ! Tu es connecté.</span>
     </section>
   </main>
 

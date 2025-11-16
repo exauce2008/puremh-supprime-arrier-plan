@@ -140,21 +140,17 @@ if (logoutBtn) {
 // 👀 État de connexion Firebase
 onAuthStateChanged(auth, user => {
   const userInfo = document.getElementById('userInfo');
-  const authSection = document.getElementById('authSection');
   const userName = document.getElementById('userName');
   const navLogin = document.querySelector('.nav-login');
   const navSettings = document.querySelector('.nav-settings');
 
   console.log("✅ Firebase détecte :", user);
-  console.log("🔍 nav-login trouvé ?", !!navLogin);
-  console.log("🔍 nav-settings trouvé ?", !!navSettings);
 
   // 🔍 AVANT CONNEXION
   if (!user) {
     isLoggedIn = false;
 
     if (userInfo) userInfo.style.display = 'none';
-    if (authSection) authSection.style.display = 'block';
     if (navLogin) navLogin.style.display = 'flex';
     if (navSettings) navSettings.style.display = 'none';
 
@@ -165,17 +161,25 @@ onAuthStateChanged(auth, user => {
   isLoggedIn = true;
   imageCount = 0;
 
-  if (userInfo) userInfo.style.display = 'block';
-  if (authSection) authSection.style.display = 'none';
+  if (userInfo) userInfo.style.display = 'flex';
   if (navLogin) navLogin.style.display = 'none';
   if (navSettings) navSettings.style.display = 'block';
   if (userName) userName.textContent = user.displayName;
 
+  // --- Avatar sécurisé ---
   if (user.photoURL && userName && userName.parentNode) {
+    const oldAvatar = document.getElementById('userAvatar');
+    if (oldAvatar) oldAvatar.remove();
+
     const avatar = document.createElement('img');
     avatar.src = user.photoURL;
     avatar.alt = "Photo de profil";
     avatar.id = "userAvatar";
+    avatar.style.width = "28px";
+    avatar.style.height = "28px";
+    avatar.style.borderRadius = "50%";
+    avatar.style.marginRight = "8px";
+
     userName.before(avatar);
   }
 });
