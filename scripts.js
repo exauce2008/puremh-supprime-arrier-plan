@@ -1,3 +1,4 @@
+// 🔐 Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 import {
@@ -24,7 +25,6 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-// 🔢 Limite d'utilisation
 let imageCount = 0;
 let isLoggedIn = false;
 
@@ -40,6 +40,7 @@ if (imageInput) {
     const file = imageInput.files[0];
     if (!file) return;
 
+    // 🔒 Limite pour les invités
     if (!isLoggedIn && imageCount >= 2) {
       alert("🚫 Tu as atteint la limite de 2 images. Connecte-toi pour un accès illimité !");
       return;
@@ -63,9 +64,7 @@ if (imageInput) {
         body: formData
       });
 
-      if (!response.ok) {
-        throw new Error('Erreur API: ' + response.statusText);
-      }
+      if (!response.ok) throw new Error('Erreur API: ' + response.statusText);
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
@@ -100,7 +99,7 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Google : " + result.user.displayName);
-        window.location.href = "index.html"; // ✅ retour automatique à l'accueil
+        window.location.href = "index.html"; // 🔁 Redirection vers accueil
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -116,7 +115,7 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Facebook : " + result.user.displayName);
-        window.location.href = "index.html"; // ✅ retour automatique à l'accueil
+        window.location.href = "index.html"; // 🔁 Redirection vers accueil
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
@@ -131,7 +130,7 @@ if (logoutBtn) {
     signOut(auth)
       .then(() => {
         alert("🚪 Déconnecté !");
-        window.location.href = "index.html"; // ✅ retour à l'accueil
+        window.location.href = "index.html"; // 🔁 Retour à l’accueil
       })
       .catch(error => {
         alert("❌ Erreur déconnexion : " + error.message);
@@ -139,45 +138,43 @@ if (logoutBtn) {
   });
 }
 
-// 👀 État de connexion
+// 👀 État de connexion Firebase
 onAuthStateChanged(auth, user => {
   const userInfo = document.getElementById('userInfo');
   const authSection = document.getElementById('authSection');
   const userName = document.getElementById('userName');
-
   const navLogin = document.querySelector('.nav-login');
   const navSettings = document.querySelector('.nav-settings');
 
-  if (user) {
-    isLoggedIn = true;
-    imageCount = 0;
+  console.log("[Firebase] onAuthStateChanged user:", user);
 
-    // ✅ Afficher zone bienvenue
-    if (userInfo) userInfo.style.display = 'block';
-    if (authSection) authSection.style.display = 'none';
-    if (userName) userName.textContent = user.displayName;
-
-    // ✅ Basculer la nav
-    if (navLogin) navLogin.style.display = 'none';
-    if (navSettings) navSettings.style.display = 'block';
-
-    // ✅ Avatar
-    if (user.photoURL) {
-      const avatar = document.createElement('img');
-      avatar.src = user.photoURL;
-      avatar.alt = "Photo de profil";
-      avatar.id = "userAvatar";
-      userInfo.insertBefore(avatar, userName);
-    }
-  } else {
+  // 🔍 AVANT CONNEXION
+  if (!user) {
     isLoggedIn = false;
 
-    // ❌ Cacher zone bienvenue
     if (userInfo) userInfo.style.display = 'none';
     if (authSection) authSection.style.display = 'block';
-
-    // ❌ Basculer la nav
     if (navLogin) navLogin.style.display = 'flex';
     if (navSettings) navSettings.style.display = 'none';
+
+    return;
+  }
+
+  // ✅ APRÈS CONNEXION
+  isLoggedIn = true;
+  imageCount = 0;
+
+  if (userInfo) userInfo.style.display = 'block';
+  if (authSection) authSection.style.display = 'none';
+  if (navLogin) navLogin.style.display = 'none';
+  if (navSettings) navSettings.style.display = 'block';
+  if (userName) userName.textContent = user.displayName;
+
+  if (user.photoURL && userName) {
+    const avatar = document.createElement('img');
+    avatar.src = user.photoURL;
+    avatar.alt = "Photo de profil";
+    avatar.id = "userAvatar";
+    userName.before(avatar); // ✅ Correction ici
   }
 });
