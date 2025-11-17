@@ -4,22 +4,22 @@
   <meta charset="UTF-8" />
   <title>Connexion - Puremh</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="script.js"></script>
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
 
   <!-- 🔝 Barre de navigation -->
   <nav class="top-nav">
     <!-- Zone avant connexion -->
-    <div class="nav-right nav-login">
+    <div id="navLogin" class="nav-right">
       <a href="login.html" class="nav-btn">Se connecter</a>
       <a href="signup.html" class="nav-btn">S’inscrire</a>
     </div>
 
     <!-- Zone après connexion -->
-    <div class="nav-right nav-settings" style="display:none;">
+    <div id="navSettings" class="nav-right hidden">
       <button id="settingsBtn" class="nav-btn">⚙️ Paramètres</button>
-      <div id="settingsMenu" class="settings-menu" style="display:none;">
+      <div id="settingsMenu" class="settings-menu hidden">
         <a href="profile.html" class="menu-item">👤 Profil</a>
         <a href="contact.html" class="menu-item">📱 Contact</a>
         <a href="privacy.html" class="menu-item">📜 Politique</a>

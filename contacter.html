@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Profil - Puremh</title>
+  <title>Contact - Puremh</title>
   <link rel="stylesheet" href="style.css" />
   <script type="module" src="script.js" defer></script>
 </head>
@@ -10,13 +10,11 @@
 
   <!-- 🔝 Barre de navigation -->
   <nav class="top-nav">
-    <!-- Zone avant connexion -->
     <div id="navLogin" class="nav-right">
       <a href="login.html" class="nav-btn">Se connecter</a>
       <a href="signup.html" class="nav-btn">S’inscrire</a>
     </div>
 
-    <!-- Zone après connexion -->
     <div id="navSettings" class="nav-right hidden">
       <button id="settingsBtn" class="nav-btn">⚙️ Paramètres</button>
       <div id="settingsMenu" class="settings-menu hidden">
@@ -29,14 +27,14 @@
     </div>
   </nav>
 
-  <!-- 👤 Contenu Profil -->
   <main class="container">
-    <h2>Mon Profil</h2>
-    <div id="profileInfo">
-      <img id="profileAvatar" alt="Avatar utilisateur" class="hidden" style="width:80px; height:80px; border-radius:50%; margin-bottom:15px;" />
-      <p><strong>Nom :</strong> <span id="profileName"></span></p>
-      <p><strong>Email :</strong> <span id="profileEmail"></span></p>
-    </div>
+    <h2>Contactez-nous</h2>
+    <p>Vous pouvez nous écrire directement sur WhatsApp :</p>
+
+    <!-- 📱 Bouton WhatsApp -->
+    <a href="https://wa.me/243853323195" target="_blank" class="whatsapp-btn">
+      💬 Discuter sur WhatsApp
+    </a>
   </main>
 
 </body>

@@ -1,3 +1,4 @@
+// 🔐 Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 import {
@@ -24,11 +25,149 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-// 🔢 Limite d'utilisation
 let imageCount = 0;
 let isLoggedIn = false;
 
-// 📸 Suppression d’arrière-plan
+// ✅ Helpers: page detection + safe selectors
+const path = window.location.pathname.toLowerCase();
+const isIndex = path.endsWith("/index.html") || path.endsWith("/") || path === "" ;
+const isLogin = path.endsWith("/login.html");
+const isSignup = path.endsWith("/signup.html");
+
+// Fallback: d'abord ID (index), sinon classes (login/signup)
+function getNavLogin() {
+  return document.getElementById('navLogin') || document.querySelector('.nav-login');
+}
+function getNavSettings() {
+  return document.getElementById('navSettings') || document.querySelector('.nav-settings');
+}
+
+// ✅ Paramètres menu toggling
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsMenu = document.getElementById('settingsMenu');
+if (settingsBtn && settingsMenu) {
+  settingsBtn.addEventListener('click', () => {
+    settingsMenu.style.display = (settingsMenu.style.display === 'none' || !settingsMenu.style.display) ? 'flex' : 'none';
+  });
+}
+
+// 🚪 Déconnexion
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    signOut(auth)
+      .then(() => {
+        alert("🚪 Déconnecté !");
+        window.location.href = "index.html";
+      })
+      .catch(error => {
+        alert("❌ Erreur déconnexion : " + error.message);
+      });
+  });
+}
+
+// 🔐 Connexion Google
+const googleBtn = document.querySelector('.google');
+if (googleBtn) {
+  googleBtn.addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        alert("✅ Connecté : " + (result.user.displayName || "Compte"));
+        // Toujours revenir à l’accueil après login/signup
+        window.location.href = "index.html";
+      })
+      .catch(error => {
+        alert("❌ Erreur Google : " + error.message);
+      });
+  });
+}
+
+// 🔐 Connexion Facebook
+const facebookBtn = document.querySelector('.facebook');
+if (facebookBtn) {
+  facebookBtn.addEventListener('click', () => {
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        alert("✅ Connecté : " + (result.user.displayName || "Compte"));
+        window.location.href = "index.html";
+      })
+      .catch(error => {
+        alert("❌ Erreur Facebook : " + error.message);
+      });
+  });
+}
+
+// 👀 État de connexion Firebase
+onAuthStateChanged(auth, user => {
+  const navLogin = getNavLogin();
+  const navSettings = getNavSettings();
+  const userInfo = document.getElementById('userInfo');
+  const userName = document.getElementById('userName');
+  const authSection = document.getElementById('authSection'); // existe sur index dans ta version actuelle
+
+  // Logs de debug utiles
+  console.log('Page:', { isIndex, isLogin, isSignup, path });
+  console.log('Targets:', { navLogin, navSettings, userInfo, userName, authSection });
+
+  if (user) {
+    isLoggedIn = true;
+    imageCount = 0;
+
+    // Navigation
+    if (navLogin) navLogin.style.display = 'none';
+    if (navSettings) navSettings.style.display = 'flex';
+
+    // Index: afficher userInfo; Login/Signup n’en ont pas forcément
+    if (isIndex && userInfo) userInfo.style.display = 'flex';
+    if (userName) userName.textContent = user.displayName || 'Utilisateur';
+
+    // Avatar
+    if (user.photoURL && userName && userName.parentNode) {
+      const oldAvatar = document.getElementById('userAvatar');
+      if (oldAvatar) oldAvatar.remove();
+
+      const avatar = document.createElement('img');
+      avatar.src = user.photoURL;
+      avatar.alt = "Photo de profil";
+      avatar.id = "userAvatar";
+      avatar.style.width = "28px";
+      avatar.style.height = "28px";
+      avatar.style.borderRadius = "50%";
+      avatar.style.marginRight = "8px";
+      userName.before(avatar);
+    }
+
+    // Index: cacher toute section d’auth si elle existe (pas souhaitée sur accueil)
+    if (isIndex && authSection) authSection.style.display = 'none';
+
+    // Login/Signup: si déjà connecté, retourner à l’accueil
+    if (isLogin || isSignup) {
+      window.location.href = "index.html";
+    }
+
+  } else {
+    isLoggedIn = false;
+
+    // Navigation
+    if (navLogin) navLogin.style.display = 'flex';
+    if (navSettings) navSettings.style.display = 'none';
+
+    // Index: cacher userInfo
+    if (isIndex && userInfo) userInfo.style.display = 'none';
+
+    // Index: garantir que les boutons Google/Facebook ne s’affichent pas en bas
+    if (isIndex && authSection) authSection.style.display = 'none';
+
+    // Login/Signup: on laisse visibles les boutons Google/Facebook
+    // (pas besoin de code ici, ils sont dans le HTML de ces pages)
+  }
+});
+
+/* ------------------------------
+   📸 Outil remove.bg (index)
+------------------------------ */
 const imageInput = document.getElementById('imageInput');
 const resultDiv = document.getElementById('result');
 const loadingDiv = document.getElementById('loading');
@@ -57,15 +196,11 @@ if (imageInput) {
     try {
       const response = await fetch('https://api.remove.bg/v1.0/removebg', {
         method: 'POST',
-        headers: {
-          'X-Api-Key': 'Ck5MT53W7vGfavrPaE7GfqvR'
-        },
+        headers: { 'X-Api-Key': 'Ck5MT53W7vGfavrPaE7GfqvR' },
         body: formData
       });
 
-      if (!response.ok) {
-        throw new Error('Erreur API: ' + response.statusText);
-      }
+      if (!response.ok) throw new Error('Erreur API: ' + response.statusText);
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
@@ -77,7 +212,7 @@ if (imageInput) {
 
       if (!isLoggedIn) imageCount++;
     } catch (error) {
-      resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}. Vérifie ta connexion ou ta clé API.</p>`;
+      resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}</p>`;
     } finally {
       loadingDiv.style.display = 'none';
     }
@@ -91,76 +226,3 @@ if (deleteBtn) {
     deleteBtn.style.display = 'none';
   });
 }
-
-// 🔐 Connexion Google
-const googleBtn = document.querySelector('.google');
-if (googleBtn) {
-  googleBtn.addEventListener('click', () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(result => {
-        alert("✅ Connecté avec Google : " + result.user.displayName);
-      })
-      .catch(error => {
-        alert("❌ Erreur Google : " + error.message);
-      });
-  });
-}
-
-// 🔐 Connexion Facebook
-const facebookBtn = document.querySelector('.facebook');
-if (facebookBtn) {
-  facebookBtn.addEventListener('click', () => {
-    const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(result => {
-        alert("✅ Connecté avec Facebook : " + result.user.displayName);
-      })
-      .catch(error => {
-        alert("❌ Erreur Facebook : " + error.message);
-      });
-  });
-}
-
-// 🚪 Déconnexion
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', () => {
-    signOut(auth)
-      .then(() => {
-        alert("🚪 Déconnecté !");
-      })
-      .catch(error => {
-        alert("❌ Erreur déconnexion : " + error.message);
-      });
-  });
-}
-
-// 👀 État de connexion
-onAuthStateChanged(auth, user => {
-  const userInfo = document.getElementById('userInfo');
-  const authSection = document.getElementById('authSection');
-  const userName = document.getElementById('userName');
-
-  if (user) {
-    isLoggedIn = true;
-    imageCount = 0;
-    if (userInfo) userInfo.style.display = 'block';
-    if (authSection) authSection.style.display = 'none';
-    if (userName) userName.textContent = user.displayName;
-
-    if (user.photoURL && !document.getElementById('userAvatar')) {
-      const avatar = document.createElement('img');
-      avatar.src = user.photoURL;
-      avatar.alt = "Photo de profil";
-      avatar.id = "userAvatar";
-      if (userInfo && userName) {
-        userInfo.insertBefore(avatar, userName);
-      }
-    }
-  } else {
-    isLoggedIn = false;
-    if (userInfo) userInfo.style.display = 'none';
-    if (authSection) authSection.style.display = 'block';
-  }
-});

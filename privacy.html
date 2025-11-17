@@ -4,80 +4,76 @@
   <meta charset="UTF-8" />
   <title>Politique de Confidentialité - Puremh</title>
   <link rel="stylesheet" href="style.css" />
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
-  <main class="container">
-    <!-- 🇫🇷 Version Française -->
-    <h2>Politique de Confidentialité</h2>
-    <p>Chez <strong>Puremh</strong>, nous respectons votre vie privée. Cette politique explique comment nous collectons, utilisons et protégeons vos données personnelles.</p>
 
-    <h3>1. Informations collectées</h3>
-    <ul>
-      <li>Images téléchargées pour la suppression d’arrière-plan.</li>
-      <li>Données de connexion (Google / Facebook).</li>
-      <li>Informations techniques (adresse IP, navigateur, pages consultées).</li>
-    </ul>
+  <!-- 🔝 Barre de navigation -->
+  <nav class="top-nav">
+    <!-- Zone avant connexion -->
+    <div id="navLogin" class="nav-right">
+      <a href="login.html" class="nav-btn">Se connecter</a>
+      <a href="signup.html" class="nav-btn">S’inscrire</a>
+    </div>
+
+    <!-- Zone après connexion -->
+    <div id="navSettings" class="nav-right hidden">
+      <button id="settingsBtn" class="nav-btn">⚙️ Paramètres</button>
+      <div id="settingsMenu" class="settings-menu hidden">
+        <a href="profile.html" class="menu-item">👤 Profil</a>
+        <a href="contact.html" class="menu-item">📱 Contact</a>
+        <a href="privacy.html" class="menu-item">📜 Politique</a>
+        <a href="conditions.html" class="menu-item">📑 CGU</a>
+        <button id="logoutBtn" class="menu-item">🚪 Se déconnecter</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 📜 Contenu Politique -->
+  <main class="container">
+    <h2>Politique de Confidentialité</h2>
+    <p>Chez <strong>Puremh</strong>, nous respectons votre vie privée et nous nous engageons à protéger vos données personnelles.</p>
+
+    <h3>1. Collecte des données</h3>
+    <p>Nous collectons uniquement les informations nécessaires pour fournir nos services (nom, email, image traitée).</p>
 
     <h3>2. Utilisation des données</h3>
-    <p>Vos données sont utilisées uniquement pour :</p>
-    <ul>
-      <li>Fournir le service de suppression d’arrière-plan.</li>
-      <li>Améliorer l’expérience utilisateur.</li>
-      <li>Afficher des publicités pertinentes via Google Ads.</li>
-    </ul>
+    <p>Vos données sont utilisées pour améliorer l’expérience utilisateur et garantir un accès sécurisé.</p>
 
     <h3>3. Partage des données</h3>
-    <p>Nous ne vendons pas vos données. Elles peuvent être partagées uniquement avec nos partenaires techniques ou si la loi l’exige.</p>
+    <p>Nous ne partageons pas vos données avec des tiers, sauf obligation légale.</p>
 
-    <h3>4. Conservation</h3>
-    <p>Les images ne sont pas stockées de manière permanente. Les données de connexion sont conservées tant que votre compte est actif.</p>
+    <h3>4. Sécurité</h3>
+    <p>Vos informations sont protégées par des mesures techniques et organisationnelles adaptées.</p>
 
-    <h3>5. Sécurité</h3>
-    <p>Nous mettons en place des mesures pour protéger vos données contre tout accès non autorisé.</p>
-
-    <h3>6. Vos droits</h3>
-    <p>Vous pouvez demander l’accès, la rectification ou la suppression de vos données à tout moment.</p>
-
-    <h3>7. Contact</h3>
-    <p>Pour toute question, contactez-nous via WhatsApp : <strong>+243 853 323 195</strong>.</p>
+    <h3>5. Vos droits</h3>
+    <p>Vous pouvez demander la suppression ou la modification de vos données en nous contactant via <a href="contact.html">WhatsApp</a>.</p>
 
     <hr />
 
-    <!-- 🇬🇧 English Version -->
-    <h2>Privacy Policy</h2>
-    <p>At <strong>Puremh</strong>, we value your privacy. This policy explains how we collect, use, and protect your personal data.</p>
+    <h2>Privacy Policy (EN)</h2>
+    <p>At <strong>Puremh</strong>, we respect your privacy and are committed to protecting your personal data.</p>
 
-    <h3>1. Information Collected</h3>
-    <ul>
-      <li>Uploaded images for background removal.</li>
-      <li>Login data (Google / Facebook).</li>
-      <li>Technical information (IP address, browser, visited pages).</li>
-    </ul>
+    <h3>1. Data Collection</h3>
+    <p>We only collect the information necessary to provide our services (name, email, processed image).</p>
 
-    <h3>2. Use of Data</h3>
-    <p>Your data is used only to:</p>
-    <ul>
-      <li>Provide background removal services.</li>
-      <li>Improve user experience.</li>
-      <li>Display relevant ads via Google Ads.</li>
-    </ul>
+    <h3>2. Data Usage</h3>
+    <p>Your data is used to improve user experience and ensure secure access.</p>
 
     <h3>3. Data Sharing</h3>
-    <p>We do not sell your data. It may only be shared with technical partners or when required by law.</p>
+    <p>We do not share your data with third parties unless legally required.</p>
 
-    <h3>4. Retention</h3>
-    <p>Images are not permanently stored. Login data is kept as long as your account is active.</p>
+    <h3>4. Security</h3>
+    <p>Your information is protected by appropriate technical and organizational measures.</p>
 
-    <h3>5. Security</h3>
-    <p>We implement measures to protect your data from unauthorized access.</p>
-
-    <h3>6. Your Rights</h3>
-    <p>You may request access, correction, or deletion of your data at any time.</p>
-
-    <h3>7. Contact</h3>
-    <p>For any questions, contact us via WhatsApp: <strong>+243 853 323 195</strong>.</p>
-
-    <p><em>Dernière mise à jour / Last updated: Novembre 2025</em></p>
+    <h3>5. Your Rights</h3>
+    <p>You can request deletion or modification of your data by contacting us via <a href="contact.html">WhatsApp</a>.</p>
   </main>
+
+  <!-- 📌 Footer -->
+  <footer class="ad-banner">
+    <p>🔔 Publicité : ton espace ici ! | <a href="conditions.html">📑 CGU</a></p>
+  </footer>
+
 </body>
 </html>

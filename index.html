@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Puremh - Suppression d’Arrière-plan</title>
 
+  <!-- ✅ Logo affiché dans l’onglet du navigateur -->
+  <link rel="icon" type="image/png" href="logo.png" />
+
   <link rel="stylesheet" href="style.css" />
   <script type="module" src="script.js" defer></script>
 </head>
@@ -19,9 +22,9 @@
     </div>
 
     <!-- Zone après connexion -->
-    <div id="navSettings" class="nav-right" style="display:none;">
+    <div id="navSettings" class="nav-right hidden">
       <button id="settingsBtn" class="nav-btn">⚙️ Paramètres</button>
-      <div id="settingsMenu" class="settings-menu" style="display:none;">
+      <div id="settingsMenu" class="settings-menu hidden">
         <a href="profile.html" class="menu-item">👤 Profil</a>
         <a href="privacy.html" class="menu-item">📜 Politique</a>
         <a href="cgu.html" class="menu-item">📑 CGU</a>
@@ -54,17 +57,9 @@
     <hr />
 
     <!-- 👤 Zone utilisateur connecté -->
-    <section id="userInfo" style="display:none; display:flex; align-items:center; gap:8px;">
+    <section id="userInfo" class="hidden" style="align-items:center; gap:8px;">
       <span id="userName"></span>
       <span>👋 Bienvenue ! Tu es connecté.</span>
-    </section>
-
-    <!-- 🔐 Zone de connexion/inscription -->
-    <section id="authSection">
-      <h2>Connexion ou Inscription</h2>
-      <p>Connecte-toi pour débloquer l’accès illimité :</p>
-      <button class="login-btn google">Se connecter avec Google</button>
-      <button class="login-btn facebook">Se connecter avec Facebook</button>
     </section>
   </main>
 
