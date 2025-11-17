@@ -1,4 +1,3 @@
-// 🔐 Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 import {
@@ -98,7 +97,6 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Google : " + result.user.displayName);
-        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -114,7 +112,6 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté avec Facebook : " + result.user.displayName);
-        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
@@ -140,46 +137,22 @@ if (logoutBtn) {
 // 👀 État de connexion Firebase
 onAuthStateChanged(auth, user => {
   const userInfo = document.getElementById('userInfo');
+  const authSection = document.getElementById('authSection');
   const userName = document.getElementById('userName');
-  const navLogin = document.getElementById('navLogin');     // ✅ corrigé
-  const navSettings = document.getElementById('navSettings'); // ✅ corrigé
+  const navLogin = document.getElementById('navLogin');
+  const navSettings = document.getElementById('navSettings');
 
-  console.log("✅ Firebase détecte :", user);
+  if (user) {
+    isLoggedIn = true;
+    imageCount = 0;
 
-  // 🔍 AVANT CONNEXION
-  if (!user) {
-    isLoggedIn = false;
+    // Sections
+    if (userInfo) userInfo.style.display = 'flex';
+    if (authSection) authSection.style.display = 'none';
 
-    if (userInfo) userInfo.style.display = 'none';
-    if (navLogin) navLogin.style.display = 'flex';
-    if (navSettings) navSettings.style.display = 'none';
+    // Navigation
+    if (navLogin) navLogin.style.display = 'none';
+    if (navSettings) navSettings.style.display = 'block';
 
-    return;
-  }
-
-  // ✅ APRÈS CONNEXION
-  isLoggedIn = true;
-  imageCount = 0;
-
-  if (userInfo) userInfo.style.display = 'flex';
-  if (navLogin) navLogin.style.display = 'none';
-  if (navSettings) navSettings.style.display = 'block';
-  if (userName) userName.textContent = user.displayName;
-
-  // --- Avatar sécurisé ---
-  if (user.photoURL && userName && userName.parentNode) {
-    const oldAvatar = document.getElementById('userAvatar');
-    if (oldAvatar) oldAvatar.remove();
-
-    const avatar = document.createElement('img');
-    avatar.src = user.photoURL;
-    avatar.alt = "Photo de profil";
-    avatar.id = "userAvatar";
-    avatar.style.width = "28px";
-    avatar.style.height = "28px";
-    avatar.style.borderRadius = "50%";
-    avatar.style.marginRight = "8px";
-
-    userName.before(avatar);
-  }
-});
+    // Nom + avatar
+    if (userName) userName.textContent
