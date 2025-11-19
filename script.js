@@ -28,29 +28,6 @@ const auth = getAuth(app);
 let imageCount = 0;
 let isLoggedIn = false;
 
-// ✅ Helpers: page detection + safe selectors
-const path = window.location.pathname.toLowerCase();
-const isIndex = path.endsWith("/index.html") || path.endsWith("/") || path === "" ;
-const isLogin = path.endsWith("/login.html");
-const isSignup = path.endsWith("/signup.html");
-
-// Fallback: d'abord ID (index), sinon classes (login/signup)
-function getNavLogin() {
-  return document.getElementById('navLogin') || document.querySelector('.nav-login');
-}
-function getNavSettings() {
-  return document.getElementById('navSettings') || document.querySelector('.nav-settings');
-}
-
-// ✅ Paramètres menu toggling
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsMenu = document.getElementById('settingsMenu');
-if (settingsBtn && settingsMenu) {
-  settingsBtn.addEventListener('click', () => {
-    settingsMenu.style.display = (settingsMenu.style.display === 'none' || !settingsMenu.style.display) ? 'flex' : 'none';
-  });
-}
-
 // 🚪 Déconnexion
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
@@ -74,8 +51,7 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté : " + (result.user.displayName || "Compte"));
-        // Toujours revenir à l’accueil après login/signup
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // retour accueil
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -91,7 +67,7 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté : " + (result.user.displayName || "Compte"));
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // retour accueil
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
@@ -101,30 +77,25 @@ if (facebookBtn) {
 
 // 👀 État de connexion Firebase
 onAuthStateChanged(auth, user => {
-  const navLogin = getNavLogin();
-  const navSettings = getNavSettings();
+  const navLogin = document.getElementById('navLogin');
+  const navSettings = document.getElementById('navSettings');
   const userInfo = document.getElementById('userInfo');
   const userName = document.getElementById('userName');
-  const authSection = document.getElementById('authSection'); // existe sur index dans ta version actuelle
-
-  // Logs de debug utiles
-  console.log('Page:', { isIndex, isLogin, isSignup, path });
-  console.log('Targets:', { navLogin, navSettings, userInfo, userName, authSection });
 
   if (user) {
     isLoggedIn = true;
     imageCount = 0;
 
-    // Navigation
-    if (navLogin) navLogin.style.display = 'none';
-    if (navSettings) navSettings.style.display = 'flex';
+    // ✅ Navigation
+    navLogin?.classList.add('hidden');
+    navSettings?.classList.remove('hidden');
 
-    // Index: afficher userInfo; Login/Signup n’en ont pas forcément
-    if (isIndex && userInfo) userInfo.style.display = 'flex';
-    if (userName) userName.textContent = user.displayName || 'Utilisateur';
+    // ✅ Zone utilisateur
+    userInfo?.classList.remove('hidden');
+    if (userName) userName.textContent = user.displayName || "Utilisateur";
 
-    // Avatar
-    if (user.photoURL && userName && userName.parentNode) {
+    // ✅ Avatar
+    if (user.photoURL && userName) {
       const oldAvatar = document.getElementById('userAvatar');
       if (oldAvatar) oldAvatar.remove();
 
@@ -136,32 +107,18 @@ onAuthStateChanged(auth, user => {
       avatar.style.height = "28px";
       avatar.style.borderRadius = "50%";
       avatar.style.marginRight = "8px";
+
       userName.before(avatar);
     }
-
-    // Index: cacher toute section d’auth si elle existe (pas souhaitée sur accueil)
-    if (isIndex && authSection) authSection.style.display = 'none';
-
-    // Login/Signup: si déjà connecté, retourner à l’accueil
-    if (isLogin || isSignup) {
-      window.location.href = "index.html";
-    }
-
   } else {
     isLoggedIn = false;
 
-    // Navigation
-    if (navLogin) navLogin.style.display = 'flex';
-    if (navSettings) navSettings.style.display = 'none';
+    // ❌ Navigation
+    navLogin?.classList.remove('hidden');
+    navSettings?.classList.add('hidden');
 
-    // Index: cacher userInfo
-    if (isIndex && userInfo) userInfo.style.display = 'none';
-
-    // Index: garantir que les boutons Google/Facebook ne s’affichent pas en bas
-    if (isIndex && authSection) authSection.style.display = 'none';
-
-    // Login/Signup: on laisse visibles les boutons Google/Facebook
-    // (pas besoin de code ici, ils sont dans le HTML de ces pages)
+    // ❌ Zone utilisateur
+    userInfo?.classList.add('hidden');
   }
 });
 
@@ -185,8 +142,8 @@ if (imageInput) {
     }
 
     resultDiv.innerHTML = '';
-    downloadBtn.style.display = 'none';
-    deleteBtn.style.display = 'none';
+    downloadBtn.classList.add('hidden');
+    deleteBtn.classList.add('hidden');
     loadingDiv.style.display = 'block';
 
     const formData = new FormData();
@@ -207,8 +164,8 @@ if (imageInput) {
 
       resultDiv.innerHTML = `<img src="${url}" alt="Image sans arrière-plan" />`;
       downloadBtn.href = url;
-      downloadBtn.style.display = 'inline-block';
-      deleteBtn.style.display = 'inline-block';
+      downloadBtn.classList.remove('hidden');
+      deleteBtn.classList.remove('hidden');
 
       if (!isLoggedIn) imageCount++;
     } catch (error) {
@@ -222,7 +179,7 @@ if (imageInput) {
 if (deleteBtn) {
   deleteBtn.addEventListener('click', () => {
     resultDiv.innerHTML = '';
-    downloadBtn.style.display = 'none';
-    deleteBtn.style.display = 'none';
+    downloadBtn.classList.add('hidden');
+    deleteBtn.classList.add('hidden');
   });
 }
