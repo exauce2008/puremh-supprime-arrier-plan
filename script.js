@@ -91,16 +91,23 @@ onAuthStateChanged(auth, user => {
   const userInfo = document.getElementById('userInfo');
   const userName = document.getElementById('userName');
 
+  // 🔹 Profil (page profile.html)
+  const profileName = document.getElementById('profileName');
+  const profileEmail = document.getElementById('profileEmail');
+  const profileAvatar = document.getElementById('profileAvatar');
+
   if (user) {
     isLoggedIn = true;
     imageCount = 0;
 
+    // Navigation
     navLogin?.classList.add('hidden');
     navSettings?.classList.remove('hidden');
     userInfo?.classList.remove('hidden');
 
     if (userName) userName.textContent = user.displayName || "Utilisateur";
 
+    // Avatar dans la nav
     if (user.photoURL && userName) {
       const oldAvatar = document.getElementById('userAvatar');
       if (oldAvatar) oldAvatar.remove();
@@ -116,12 +123,26 @@ onAuthStateChanged(auth, user => {
 
       userName.before(avatar);
     }
+
+    // 🔹 Remplissage du profil
+    if (profileName) profileName.textContent = user.displayName || "Nom indisponible";
+    if (profileEmail) profileEmail.textContent = user.email || "Email indisponible";
+    if (profileAvatar && user.photoURL) {
+      profileAvatar.src = user.photoURL;
+      profileAvatar.classList.remove('hidden');
+    }
+
   } else {
     isLoggedIn = false;
 
     navLogin?.classList.remove('hidden');
     navSettings?.classList.add('hidden');
     userInfo?.classList.add('hidden');
+
+    // 🔹 Nettoyage profil si pas connecté
+    if (profileName) profileName.textContent = "";
+    if (profileEmail) profileEmail.textContent = "";
+    if (profileAvatar) profileAvatar.classList.add('hidden');
   }
 });
 
