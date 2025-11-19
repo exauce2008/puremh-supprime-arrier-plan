@@ -51,7 +51,7 @@ if (googleBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté : " + (result.user.displayName || "Compte"));
-        window.location.href = "index.html"; // retour accueil
+        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur Google : " + error.message);
@@ -67,11 +67,20 @@ if (facebookBtn) {
     signInWithPopup(auth, provider)
       .then(result => {
         alert("✅ Connecté : " + (result.user.displayName || "Compte"));
-        window.location.href = "index.html"; // retour accueil
+        window.location.href = "index.html";
       })
       .catch(error => {
         alert("❌ Erreur Facebook : " + error.message);
       });
+  });
+}
+
+// ⚙️ Menu Paramètres
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsMenu = document.getElementById('settingsMenu');
+if (settingsBtn && settingsMenu) {
+  settingsBtn.addEventListener('click', () => {
+    settingsMenu.classList.toggle('hidden');
   });
 }
 
@@ -86,15 +95,12 @@ onAuthStateChanged(auth, user => {
     isLoggedIn = true;
     imageCount = 0;
 
-    // ✅ Navigation
     navLogin?.classList.add('hidden');
     navSettings?.classList.remove('hidden');
-
-    // ✅ Zone utilisateur
     userInfo?.classList.remove('hidden');
+
     if (userName) userName.textContent = user.displayName || "Utilisateur";
 
-    // ✅ Avatar
     if (user.photoURL && userName) {
       const oldAvatar = document.getElementById('userAvatar');
       if (oldAvatar) oldAvatar.remove();
@@ -113,11 +119,8 @@ onAuthStateChanged(auth, user => {
   } else {
     isLoggedIn = false;
 
-    // ❌ Navigation
     navLogin?.classList.remove('hidden');
     navSettings?.classList.add('hidden');
-
-    // ❌ Zone utilisateur
     userInfo?.classList.add('hidden');
   }
 });

@@ -65,7 +65,7 @@ input[type="file"] {
 
 /* 📥 Boutons téléchargement et suppression */
 #downloadBtn, #deleteBtn {
-  display: none;
+  /* ⚠️ supprimé display:none pour éviter conflit */
   margin-top: 20px;
   padding: 12px 20px;
   background-color: #0077cc;
@@ -294,7 +294,6 @@ input[type="file"] {
   background: #ffffff;
   border: 1px solid #ccc;
   border-radius: 8px;
-  display: none;
   flex-direction: column;
   min-width: 180px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -306,4 +305,5 @@ input[type="file"] {
   text-decoration: none;
   color: #003366;
   font-weight: 500;
-  cursor: pointer
+  cursor: pointer;
+}
