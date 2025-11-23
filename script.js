@@ -28,7 +28,9 @@ const auth = getAuth(app);
 let imageCount = 0;
 let isLoggedIn = false;
 
-// 🚪 Déconnexion
+/* ------------------------------
+   🚪 Déconnexion
+------------------------------ */
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
@@ -43,7 +45,9 @@ if (logoutBtn) {
   });
 }
 
-// 🔐 Connexion Google
+/* ------------------------------
+   🔐 Connexion Google & Facebook
+------------------------------ */
 const googleBtn = document.querySelector('.google');
 if (googleBtn) {
   googleBtn.addEventListener('click', () => {
@@ -59,7 +63,6 @@ if (googleBtn) {
   });
 }
 
-// 🔐 Connexion Facebook
 const facebookBtn = document.querySelector('.facebook');
 if (facebookBtn) {
   facebookBtn.addEventListener('click', () => {
@@ -75,7 +78,9 @@ if (facebookBtn) {
   });
 }
 
-// ⚙️ Menu Paramètres
+/* ------------------------------
+   ⚙️ Menu Paramètres
+------------------------------ */
 const settingsBtn = document.getElementById('settingsBtn');
 const settingsMenu = document.getElementById('settingsMenu');
 if (settingsBtn && settingsMenu) {
@@ -84,14 +89,15 @@ if (settingsBtn && settingsMenu) {
   });
 }
 
-// 👀 État de connexion Firebase
+/* ------------------------------
+   👀 État de connexion Firebase
+------------------------------ */
 onAuthStateChanged(auth, user => {
   const navLogin = document.getElementById('navLogin');
   const navSettings = document.getElementById('navSettings');
   const userInfo = document.getElementById('userInfo');
   const userName = document.getElementById('userName');
 
-  // 🔹 Profil (page profile.html)
   const profileName = document.getElementById('profileName');
   const profileEmail = document.getElementById('profileEmail');
   const profileAvatar = document.getElementById('profileAvatar');
@@ -100,14 +106,12 @@ onAuthStateChanged(auth, user => {
     isLoggedIn = true;
     imageCount = 0;
 
-    // Navigation
     navLogin?.classList.add('hidden');
     navSettings?.classList.remove('hidden');
     userInfo?.classList.remove('hidden');
 
     if (userName) userName.textContent = user.displayName || "Utilisateur";
 
-    // Avatar dans la nav
     if (user.photoURL && userName) {
       const oldAvatar = document.getElementById('userAvatar');
       if (oldAvatar) oldAvatar.remove();
@@ -124,7 +128,6 @@ onAuthStateChanged(auth, user => {
       userName.before(avatar);
     }
 
-    // 🔹 Remplissage du profil
     if (profileName) profileName.textContent = user.displayName || "Nom indisponible";
     if (profileEmail) profileEmail.textContent = user.email || "Email indisponible";
     if (profileAvatar && user.photoURL) {
@@ -139,7 +142,6 @@ onAuthStateChanged(auth, user => {
     navSettings?.classList.add('hidden');
     userInfo?.classList.add('hidden');
 
-    // 🔹 Nettoyage profil si pas connecté
     if (profileName) profileName.textContent = "";
     if (profileEmail) profileEmail.textContent = "";
     if (profileAvatar) profileAvatar.classList.add('hidden');
@@ -147,63 +149,77 @@ onAuthStateChanged(auth, user => {
 });
 
 /* ------------------------------
-   📸 Outil remove.bg (index)
+   🎨 Assistant Logo avec backend Stability AI
 ------------------------------ */
-const imageInput = document.getElementById('imageInput');
-const resultDiv = document.getElementById('result');
-const loadingDiv = document.getElementById('loading');
-const downloadBtn = document.getElementById('downloadBtn');
-const deleteBtn = document.getElementById('deleteBtn');
+const chatBox = document.getElementById('chatBox');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const generatedLogo = document.getElementById('generatedLogo');
 
-if (imageInput) {
-  imageInput.addEventListener('change', async () => {
-    const file = imageInput.files[0];
-    if (!file) return;
+let step = 0;
+let logoData = { description: "", color: "", text: "" };
 
-    if (!isLoggedIn && imageCount >= 2) {
-      alert("🚫 Tu as atteint la limite de 2 images. Connecte-toi pour un accès illimité !");
-      return;
-    }
-
-    resultDiv.innerHTML = '';
-    downloadBtn.classList.add('hidden');
-    deleteBtn.classList.add('hidden');
-    loadingDiv.style.display = 'block';
-
-    const formData = new FormData();
-    formData.append('image_file', file);
-    formData.append('size', 'auto');
-
-    try {
-      const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-        method: 'POST',
-        headers: { 'X-Api-Key': 'Ck5MT53W7vGfavrPaE7GfqvR' },
-        body: formData
-      });
-
-      if (!response.ok) throw new Error('Erreur API: ' + response.statusText);
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      resultDiv.innerHTML = `<img src="${url}" alt="Image sans arrière-plan" />`;
-      downloadBtn.href = url;
-      downloadBtn.classList.remove('hidden');
-      deleteBtn.classList.remove('hidden');
-
-      if (!isLoggedIn) imageCount++;
-    } catch (error) {
-      resultDiv.innerHTML = `<p style="color:red;">Erreur : ${error.message}</p>`;
-    } finally {
-      loadingDiv.style.display = 'none';
-    }
-  });
+function addMessage(text, sender="bot") {
+  const msg = document.createElement("div");
+  msg.classList.add("chat-message", sender === "bot" ? "chat-bot" : "chat-user");
+  msg.textContent = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-if (deleteBtn) {
-  deleteBtn.addEventListener('click', () => {
-    resultDiv.innerHTML = '';
-    downloadBtn.classList.add('hidden');
-    deleteBtn.classList.add('hidden');
+function getGreeting() {
+  const now = new Date();
+  const hour = now.getHours();
+  return (hour >= 6 && hour < 18)
+    ? "Bonjour 👋, je suis ton assistant de création de logos."
+    : "Bonsoir 🌙, je suis ton assistant de création de logos.";
+}
+
+// 🔑 Fonction pour appeler ton backend Node.js
+async function generateLogo(prompt) {
+  try {
+    const response = await fetch("http://localhost:3000/generate-logo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    if (!response.ok) throw new Error("Erreur backend : " + response.statusText);
+
+    const data = await response.json();
+    const imageUrl = data.image; // ton backend renvoie l’URL
+
+    generatedLogo.src = imageUrl;
+    generatedLogo.classList.remove("hidden");
+  } catch (error) {
+    addMessage("❌ Erreur : " + error.message);
+  }
+}
+
+if (sendBtn && chatBox) {
+  addMessage(getGreeting());
+  addMessage("Décris ton logo en quelques mots.");
+
+  sendBtn.addEventListener("click", async () => {
+    const userText = chatInput.value.trim();
+    if (!userText) return;
+    addMessage(userText, "user");
+    chatInput.value = "";
+
+    if (step === 0) {
+      logoData.description = userText;
+      addMessage("Super 👍. Quelle couleur veux-tu pour ton logo ?");
+      step++;
+    } else if (step === 1) {
+      logoData.color = userText;
+      addMessage("Parfait 🎨. Quel texte veux-tu afficher sur ton logo ?");
+      step++;
+    } else if (step === 2) {
+      logoData.text = userText;
+      addMessage("Merci ✅. Je vais générer ton logo...");
+
+      const finalPrompt = `${logoData.description}, couleur ${logoData.color}, texte "${logoData.text}", style minimaliste et professionnel`;
+      await generateLogo(finalPrompt);
+    }
   });
 }

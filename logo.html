@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Générateur de Logo - Puremh</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- ⚡ Connexion directe avec ton script.js -->
+  <script type="module" src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- 🔝 Barre de navigation -->
+  <nav class="top-nav">
+    <div id="navLogin" class="nav-right">
+      <a href="login.html" class="nav-btn">Se connecter</a>
+      <a href="signup.html" class="nav-btn">S’inscrire</a>
+    </div>
+
+    <div id="navSettings" class="nav-right hidden">
+      <button id="settingsBtn" class="nav-btn">⚙️ Paramètres</button>
+      <div id="settingsMenu" class="settings-menu hidden">
+        <a href="profile.html" class="menu-item">👤 Profil</a>
+        <a href="logo.html" class="menu-item">🎨 Générateur de Logo</a>
+        <a href="privacy.html" class="menu-item">📜 Politique</a>
+        <a href="cgu.html" class="menu-item">📑 CGU</a>
+        <button id="logoutBtn" class="menu-item">🚪 Se déconnecter</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🎨 Générateur de Logo façon chatbot -->
+  <main class="container">
+    <h2>Assistant Logo</h2>
+    <div id="chatBox">
+      <!-- Les messages du bot et de l’utilisateur apparaissent ici -->
+    </div>
+
+    <input type="text" id="chatInput" placeholder="Écris ta réponse..." />
+    <button id="sendBtn">Envoyer</button>
+
+    <div id="logoResult" style="margin-top:20px;">
+      <img id="generatedLogo" class="hidden" alt="Logo généré" />
+    </div>
+  </main>
+
+</body>
+</html>
